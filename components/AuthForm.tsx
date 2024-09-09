@@ -11,7 +11,7 @@ import CustomInput from "./CustomInput";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signIn, signUp } from "@/lib/actions/user.actions";
+import { getLoggedInUser, signIn, signUp } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
@@ -40,7 +40,7 @@ const AuthForm = ({ type }: { type: string }) => {
       if (type === "sign-in") {
         const response = await signIn({
           email: data.email,
-          passwoed: data.password,
+          password: data.password,
         });
         if (response) router.push("/");
       }
@@ -168,21 +168,22 @@ const AuthForm = ({ type }: { type: string }) => {
               </div>
             </form>
           </Form>
+
+          <footer className="flex justify-center gap-1">
+            <p className="text-14 font-normal text-gray-600">
+              {type === "sign-in"
+                ? "Don't have an account?"
+                : "Already have an account?"}
+            </p>
+            <Link
+              href={type === "sign-in" ? "/sign-up" : "/sign-in"}
+              className="form-link"
+            >
+              {type === "sign-in" ? "Sign up" : "Sign in"}
+            </Link>
+          </footer>
         </>
       )}
-      <footer className="flex justify-center gap-1">
-        <p className="text-14 font-normal text-gray-600">
-          {type === "sign-in"
-            ? "Don't have an account?"
-            : "Already have an account?"}
-        </p>
-        <Link
-          href={type === "sign-in" ? "/sign-up" : "/sign-in"}
-          className="form-link"
-        >
-          {type === "sign-in" ? "Sign up" : "Sign in"}
-        </Link>
-      </footer>
     </section>
   );
 };
