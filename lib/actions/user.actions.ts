@@ -49,7 +49,7 @@ export const signIn = async ({ email, password }: signInProps) => {
       secure: true,
     });
 
-    const user = await getUserInfo({ userId: session.$id });
+    const user = await getUserInfo({ userId: session.userId });
 
     return parseStringify(user);
   } catch (error) {
@@ -95,8 +95,6 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
       }
     );
 
-    if (!newUser) throw new Error("Error creating user document");
-
     const session = await account.createEmailPasswordSession(email, password);
 
     cookies().set("appwrite-session", session.secret, {
@@ -117,8 +115,7 @@ export async function getLoggedInUser() {
     const { account } = await createSessionClient();
 
     const result = await account.get();
-
-    const user = getUserInfo({ userId: result.$id });
+    const user = await getUserInfo({ userId: result.$id });
 
     return parseStringify(user);
   } catch (error) {
